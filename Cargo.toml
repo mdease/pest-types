@@ -1,0 +1,8 @@
+[package]
+name = "types"
+version = "0.1.0"
+authors = ["Maddie <mdd@mit.edu>"]
+
+[dependencies]
+pest = { path = "../pest-fork/pest" }
+pest_derive = { path = "../pest-fork/derive" }
