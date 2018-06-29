@@ -9,14 +9,33 @@ use pest::Parser;
 struct TypesParser;
 
 fn main() {
-  // bytes for 9 as a u16
-  let pairs = TypesParser::parse(Rule::t, &[9, 0]).unwrap_or_else(|e| panic!("{}", e));
+  // macro for defining and filling structs
+  macro_rules! create_struct {
+    ($name: ident, $($i: ident, $e: expr),*) => {{
+      struct $name {
+        $($i: u16),*
+      }
+
+      let tmp: $name = $name {
+        $($i: $e),*
+      };
+
+      tmp
+    }}
+  }
+
+  // bytes for 9 and 5 as u16
+  let pairs = TypesParser::parse(Rule::t, &[9, 0, 5, 0]).unwrap_or_else(|e| panic!("{}", e));
 
   for pair in pairs {
-  	let span = pair.clone().into_span();
-  	let matched: u16 = span.as_type();
+    // get the matched u16s
+    let nums = pair.clone().into_span().as_type();
 
-  	println!("Rule:    {:?}", pair.as_rule());
-  	println!("Matched:    {}", matched);
+    // create the struct
+    let my_struct = create_struct!(MyNums, number_one, nums[0], number_two, nums[1]);
+
+    // check struct fields
+    println!("MyNums.number_one: {}", my_struct.number_one);
+    println!("MyNums.number_two: {}", my_struct.number_two);
   }
 }
