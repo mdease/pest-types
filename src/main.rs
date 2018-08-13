@@ -4,12 +4,22 @@ extern crate pest_derive;
 
 use pest::Parser;
 
+// #[derive(Parser)]
+// struct Child {
+//   first_field: u32
+// }
+
 #[derive(Parser)]
-#[grammar = "types.pest"]
-struct TypesParser{
+struct Child {
   first_field: u16,
-  second_field: u8,
+  second_field: bool,
   third_field: bool
+}
+
+#[derive(Parser)]
+struct TypesParser {
+  first_field: Child,
+  second_field: u8
 }
 
 fn main() {
@@ -28,6 +38,6 @@ fn main() {
   //   }}
   // }
 
-  let t = TypesParser::parse_and_create(Rule::t, &[9, 0, 1, 0], true);
-  println!("first_field: {}\nsecond_field: {}\nthird_field: {}", t.first_field, t.second_field, t.third_field);
+  let input = &[9, 0, 1, 0, 8];
+  let t = TypesParser::parse_and_create(true, &mut input.to_vec());
 }
